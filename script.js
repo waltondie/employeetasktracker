@@ -1,5 +1,5 @@
 // Login Page Logic
-if (window.location.pathname.includes('login.html')) {
+if (window.location.pathname.includes('main.html')) {
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const employeeId = document.getElementById('employeeId').value.trim();
@@ -10,7 +10,7 @@ if (window.location.pathname.includes('login.html')) {
         }
 
         localStorage.setItem('employeeId', employeeId);
-        window.location.href = 'index.html';
+        window.location.href = 'main.html';
     });
 }
 
@@ -82,7 +82,7 @@ function handleSignoutClick() {
 // Main Application Logic
 document.addEventListener('DOMContentLoaded', function() {
     const employeeId = localStorage.getItem('employeeId');
-    if (!employeeId) window.location.href = 'login.html';
+    if (!employeeId) window.location.href = 'main.html';
 
     // Employee Data
     const employeeData = [
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentEmployee = employeeData.find(emp => emp.id === employeeId);
     if (!currentEmployee) {
         alert("Invalid Employee ID");
-        window.location.href = 'login.html';
+        window.location.href = 'main.html';
     }
 
     // DOM Elements
