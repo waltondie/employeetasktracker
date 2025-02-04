@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Timeline</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Employee Task Timeline</h1>
+    <p>ID: <span id="loggedInId"></span> | Name: <span id="loggedInName"></span></p>
+  </header>
+
+  <label for="overtimeHours">Overtime Hours (Optional)</label>
+  <input type="number" id="overtimeHours" name="overtimeHours" placeholder="Enter overtime hours">
+
+  <label for="datePicker">Select Date:</label>
+  <input type="date" id="datePicker" name="datePicker">
+
+  <div class="timeline-container">
+    <div class="time-scale"></div>
+    <div id="timelineBar" class="timeline-bar"></div>
+  </div>
+  <ul id="taskList"></ul>
+
+  <div class="popup">
+    <form id="entryForm">
+      <h2>Enter Task Details</h2>
+
+      <label for="taskType">Work Type *</label>
+      <select id="taskType" name="taskType" required>
+        <option value="">Select Work Type</option>
+        <option value="Design">Design</option>
+        <option value="QC">QC</option>
+        <option value="vmc-cam">VMC-CAM</option>
+        <option value="wire cut-cam">Wire Cut-CAM</option>
+        <option value="Die Test">Die Test</option>
+        <option value="Hand-over work">Hand-over Work</option>
+        <option value="Tamper">Tamper</option>
+        <option value="Data Entry">Data Entry</option>
+        <option value="Production Work">Production Work</option>
+        <option value="Screw Project">Screw Project</option>
+        <option value="Others work">Others Work</option>
+        <option value="Maintenance work">Maintenance Work</option>
+        <option value="Modify work">Modify Work</option>
+        <option value="Meeting (Production)">Meeting (Production)</option>
+        <option value="Material Planning">Material Planning</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="tgNumber">TG Number (Optional)</label>
+      <input type="text" id="tgNumber" name="tgNumber" placeholder="Enter TG Number">
+
+      <label for="status">Task Status *</label>
+      <select id="status" name="status" required>
+        <option value="">Select Status</option>
+        <option value="Complete">Complete</option>
+        <option value="In Progress">In Progress</option>
+      </select>
+
+      <label for="taskDesc">Task Description</label>
+      <textarea id="taskDesc" name="taskDesc" placeholder="Describe the task..."></textarea>
+
+      <button type="submit">Add Task</button>
+      <button type="button" class="close">Cancel</button>
+    </form>
+  </div>
+
+  <!-- Copyright Footer -->
+  <footer>
+    <p>Developed by: Md Rahatuzzaman Roni (58625)</p>
+  </footer>
+
+  <!-- Google Sheets API Buttons -->
+  <button id="authorize_button" style="visibility: hidden;">Authorize</button>
+  <button id="signout_button" style="visibility: hidden;">Sign Out</button>
+
+  <!-- Google Sheets API Script -->
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
