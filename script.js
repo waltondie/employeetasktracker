@@ -173,21 +173,30 @@ function updateTimeline() {
     timelineBar.innerHTML = '';
 
     let overtimeMinutes = parseFloat(overtimeInput.value) * 60 || 0;
-    const totalTime = shiftEnd - shiftStart + overtimeMinutes;
-    const updatedShiftEnd = shiftEnd + overtimeMinutes;
+    let totalTime = shiftEnd - shiftStart + overtimeMinutes;
+    let updatedShiftEnd = shiftEnd + overtimeMinutes;
 
-    for (let i = shiftStart; i <= updatedShiftEnd; i += 60) {
+    for (let i = shiftStart; i <= updatedShiftEnd; i += 30) {
         const timeLabel = document.createElement('div');
         timeLabel.textContent = minutesToTime(i);
         timeScale.appendChild(timeLabel);
+
+        // Add half-hour marker
+        const separator = document.createElement('div');
+        separator.classList.add('half-hour-line');
+        separator.style.position = 'absolute';
+        separator.style.left = `${((i - shiftStart) / totalTime) * 100}%`;
+        separator.style.height = '100%';
+        separator.style.width = '1px';
+        separator.style.backgroundColor = '#ccc';
+        separator.style.zIndex = '1';
+        timelineBar.appendChild(separator);
     }
 
     taskList.innerHTML = '';
-    tasks.forEach((task) => {
-        const taskItem = document.createElement('li');
-        taskItem.textContent = `${task.type} (${minutesToTime(task.start)} - ${minutesToTime(task.end)})`;
-        taskList.appendChild(taskItem);
+    taskTableBody.innerHTML = '';
 
+    tasks.forEach((task) => {
         const taskSegment = document.createElement('div');
         taskSegment.classList.add('timeline-segment');
         taskSegment.style.position = 'absolute';
@@ -196,12 +205,24 @@ function updateTimeline() {
         taskSegment.style.backgroundColor = task.color;
         taskSegment.style.left = `${((task.start - shiftStart) / totalTime) * 100}%`;
         taskSegment.style.width = `${((task.end - task.start) / totalTime) * 100}%`;
-        taskSegment.textContent = task.type;
+        taskSegment.textContent = `${task.type} (TG: ${task.tgNumber})`;
         taskSegment.style.color = '#ffffff';
         taskSegment.style.textAlign = 'center';
         timelineBar.appendChild(taskSegment);
+
+        // Add task to the task table
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${task.type}</td>
+            <td>${task.tgNumber}</td>
+            <td>${minutesToTime(task.start)}</td>
+            <td>${minutesToTime(task.end)}</td>
+            <td>${task.description || "No Description"}</td>
+        `;
+        taskTableBody.appendChild(row);
     });
 }
+
 
 document.getElementById('cancelBtn').addEventListener('click', function() {
     // Hide the popup (in this case, assuming the popup is a form container)
