@@ -157,3 +157,10 @@ button {
   padding: 12px;
   font-size: 16px;
 }
+.half-hour-line {
+    position: absolute;
+    width: 2px;
+    background-color: #ccc;
+    height: 100%;
+    z-index: 1;
+}
