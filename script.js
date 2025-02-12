@@ -169,19 +169,24 @@ function minutesToTime(minutes) {
 }
 
 function updateTimeline() {
+    // Clear existing timeline and time scale
     timeScale.innerHTML = '';
     timelineBar.innerHTML = '';
 
+    // Calculate overtime and total time
     let overtimeMinutes = parseFloat(overtimeInput.value) * 60 || 0;
     let totalTime = shiftEnd - shiftStart + overtimeMinutes;
     let updatedShiftEnd = shiftEnd + overtimeMinutes;
 
+    // Create time markers and vertical lines
     for (let i = shiftStart; i <= updatedShiftEnd; i += 30) {
+        // Create time label
         const timeLabel = document.createElement('div');
         timeLabel.textContent = minutesToTime(i);
+        timeLabel.classList.add('time-label');
         timeScale.appendChild(timeLabel);
 
-        // Add half-hour marker
+        // Create vertical separator (clickable time marker)
         const separator = document.createElement('div');
         separator.classList.add('half-hour-line');
         separator.style.position = 'absolute';
@@ -190,13 +195,54 @@ function updateTimeline() {
         separator.style.width = '1px';
         separator.style.backgroundColor = '#ccc';
         separator.style.zIndex = '1';
+        separator.dataset.time = i;
+
+        // Add click handler for time markers
+        separator.addEventListener('click', function (e) {
+            e.stopPropagation();
+
+            // Remove existing highlights
+            document.querySelectorAll('.half-hour-line').forEach(line => {
+                line.style.backgroundColor = '#ccc';
+            });
+
+            // Highlight clicked marker
+            this.style.backgroundColor = '#3b82f6';
+
+            // Set start time to clicked marker's time
+            const clickedTime = parseInt(this.dataset.time);
+            const startTime = clickedTime;
+            const endTime = clickedTime + 30; // Default 30-minute block
+
+            // Update the preview segment
+            if (!taskPreviewSegment) {
+                taskPreviewSegment = document.createElement('div');
+                taskPreviewSegment.classList.add('timeline-segment');
+                taskPreviewSegment.style.position = 'absolute';
+                taskPreviewSegment.style.top = '0';
+                taskPreviewSegment.style.height = '100%';
+                taskPreviewSegment.style.backgroundColor = 'rgba(59, 130, 246, 0.5)';
+                timelineBar.appendChild(taskPreviewSegment);
+            }
+
+            taskPreviewSegment.style.left = `${((startTime - shiftStart) / totalTime) * 100}%`;
+            taskPreviewSegment.style.width = `${((endTime - startTime) / totalTime) * 100}%`;
+
+            // Store the selected time range
+            timelineBar.dataset.startTime = startTime;
+            timelineBar.dataset.endTime = endTime;
+        });
+
         timelineBar.appendChild(separator);
     }
 
+    // Clear existing task list and table
     taskList.innerHTML = '';
     taskTableBody.innerHTML = '';
 
+    // Render tasks
     tasks.forEach((task) => {
+        // Create timeline segment
         const taskSegment = document.createElement('div');
         taskSegment.classList.add('timeline-segment');
         taskSegment.style.position = 'absolute';
@@ -205,7 +251,7 @@ function updateTimeline() {
         taskSegment.style.backgroundColor = task.color;
         taskSegment.style.left = `${((task.start - shiftStart) / totalTime) * 100}%`;
         taskSegment.style.width = `${((task.end - task.start) / totalTime) * 100}%`;
-        taskSegment.textContent = `${task.type} (TG: ${task.tgNumber})`;
+        taskSegment.textContent = `${task.type}`; // Only show task type, not TG number
         taskSegment.style.color = '#ffffff';
         taskSegment.style.textAlign = 'center';
         timelineBar.appendChild(taskSegment);
@@ -214,7 +260,6 @@ function updateTimeline() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${task.type}</td>
-            <td>${task.tgNumber}</td>
             <td>${minutesToTime(task.start)}</td>
             <td>${minutesToTime(task.end)}</td>
             <td>${task.description || "No Description"}</td>
