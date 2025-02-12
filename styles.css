@@ -62,6 +62,7 @@ body {
   background: #000; /* Solid black background */
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Add this line */
 }
 
   
