@@ -15,7 +15,15 @@
   </header>
 
   <label for="overtimeHours">Overtime Hours (Optional)</label>
-  <input type="number" id="overtimeHours" name="overtimeHours" placeholder="Enter overtime hours">
+<select id="overtimeHours" name="overtimeHours">
+  <option value="">Select hours</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+
 
   <label for="datePicker">Select Date:</label>
   <input type="date" id="datePicker" name="datePicker">
@@ -29,6 +37,7 @@
   <!-- Popup for the Task Form -->
 <div class="popup">
   <form id="entryForm" class="bg-white p-4 rounded shadow-sm">
+
     <div class="mb-3">
       <label for="taskType" class="form-label">Work Type *</label>
       <select id="taskType" name="taskType" class="form-select" required>
@@ -79,6 +88,20 @@
 </form>
 
 </div>
+
+<h3>Task List</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Work Type</th>
+            <th>TG Number</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody id="taskTableBody"></tbody>
+</table>
 
 
   <!-- Copyright Footer -->
