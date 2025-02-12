@@ -9,6 +9,7 @@ if (window.location.pathname.includes('index.html')) {
             return;
         }
 
+        
         localStorage.setItem('employeeId', employeeId);
         window.location.href = 'main.html'; // Redirect to main.html after login
     });
