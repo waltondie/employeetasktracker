@@ -224,44 +224,10 @@ function updateTimeline() {
 }
 
 
-
 document.getElementById('cancelBtn').addEventListener('click', function() {
     // Hide the popup (in this case, assuming the popup is a form container)
     document.querySelector('.popup').style.display = 'none';
 });
-
-function showTaskPopup(xPos) {
-    const rect = timelineBar.getBoundingClientRect();
-    const percent = Math.min(Math.max((xPos - rect.left) / rect.width, 0), 1);
-
-    let overtimeMinutes = parseFloat(overtimeInput.value) * 60 || 0;
-    let totalTime = shiftEnd - shiftStart + overtimeMinutes;
-
-    // Convert clicked position to minutes
-    let clickedMinutes = shiftStart + Math.round(totalTime * percent);
-
-    // 🟢 Round start time to the nearest 5 minutes
-    const roundedStart = roundToNearest5(clickedMinutes);
-    
-    // 🟢 Determine End Time based on user dragging (or set default 5-minute interval)
-    let roundedEnd = popup.dataset.endTime ? roundToNearest5(parseInt(popup.dataset.endTime)) : roundToNearest5(roundedStart + 5);
-
-    // 🟢 Update the popup with correct rounded times
-    document.getElementById('startTimeDisplay').textContent = `Start Time: ${minutesToTime(roundedStart)}`;
-    document.getElementById('endTimeDisplay').textContent = `End Time: ${minutesToTime(roundedEnd)}`;
-
-    // Store values in dataset for later use
-    popup.dataset.startTime = roundedStart;
-    popup.dataset.endTime = roundedEnd;
-
-    // Show the popup
-    popup.style.display = 'flex';
-}
-
-
-function roundToNearest5(minutes) {
-    return Math.round(minutes / 5) * 5;
-}
 
 // Event Listeners
 function handleClickOrDrag(xPos) {
@@ -307,7 +273,6 @@ timelineBar.addEventListener('click', (e) => {
     if (!isDragging) {
         handleClickOrDrag(e.clientX);
         popup.style.display = 'flex';
-        showTaskPopup(e.clientX);
     }
 });
 
@@ -341,17 +306,16 @@ entryForm.addEventListener('submit', async function (e) {
 
     // Save to Local Storage
     const task = {
-        type: taskType,
-        tgNumber: tgNumber,
+        type: `${taskType} (TG:${tgNumber})`,
+        description: taskDesc,
         start: taskStart,
         end: taskEnd,
-        description: taskDesc,
         color: colors[tasks.length % colors.length],
         date: selectedDate
     };
-    
+
     tasks.push(task);
-    saveTasksForDate(selectedDate); // Save data locally    
+    saveTasksForDate(selectedDate);
 
     // Save to Google Sheets
     const sheetData = [
