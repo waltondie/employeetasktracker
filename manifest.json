@@ -1,0 +1,21 @@
+{
+  "name": "Walton Die Task Tracker",
+  "short_name": "TaskTracker",
+  "start_url": "/employeetasktracker/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/employeetasktracker/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/employeetasktracker/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
